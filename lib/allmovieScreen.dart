@@ -43,8 +43,8 @@ class _allMoviesState extends State<allMovies> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Text("Upcoming movie", style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
+                padding: EdgeInsets.symmetric(vertical: 28, horizontal: 10),
+                child: Text("Upcoming movie", style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18, fontStyle: FontStyle.italic),),
               ),
               Flexible(
                 flex: 3,
