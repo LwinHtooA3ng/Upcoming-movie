@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'allmovieScreen.dart';
+import 'movieDetail.dart';
 
 void main() => runApp(upcoming_movie());
 
@@ -15,6 +16,7 @@ class upcoming_movie extends StatelessWidget {
       initialRoute: "/",
       routes: {
         "/":(context) => const allMovies(), 
+        "/detail" : (context) => const movieDetail()
       },
     );
   }

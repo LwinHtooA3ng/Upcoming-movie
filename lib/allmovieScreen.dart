@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'movieCard.dart';
 
 class allMovies extends StatefulWidget {
   const allMovies({Key? key}) : super(key: key);
@@ -40,19 +41,25 @@ class _allMoviesState extends State<allMovies> {
       // backgroundColor: Colors.grey[200],
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(5),
+          padding: EdgeInsets.all(5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(vertical: 28, horizontal: 10),
-                child: Text(
-                  "Upcoming movie",
-                  style: TextStyle(
-                      letterSpacing: 2,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      fontStyle: FontStyle.italic),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    Text(
+                      "Upcoming movie",
+                      style: TextStyle(
+                          letterSpacing: 1.5,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          fontStyle: FontStyle.italic),
+                    ),
+                    Icon(Icons.search_rounded),
+                  ],
                 ),
               ),
               Flexible(
@@ -78,11 +85,18 @@ class _allMoviesState extends State<allMovies> {
                                   var releaseDate =
                                       movie[index]["release_date"];
                                   var overview = movie[index]["overview"];
+                                  var backImg = movie[index]["backdrop_path"];
+                                  dynamic rating = movie[index]["vote_average"];
+                                  dynamic movieId = movie[index]["id"];
                                   return movieCard(
-                                      title: title,
-                                      image: image,
-                                      releaseDate: releaseDate,
-                                      overview: overview);
+                                    title: title,
+                                    image: image,
+                                    releaseDate: releaseDate,
+                                    overview: overview,
+                                    backImg: backImg,
+                                    rating: rating,
+                                    movieId : movieId,
+                                  );
                                 }),
                           ),
                   ],
@@ -94,68 +108,4 @@ class _allMoviesState extends State<allMovies> {
       ),
     );
   }
-}
-
-Widget movieCard({title, image, releaseDate, overview}) {
-  return Card(
-    child: Padding(
-      padding: const EdgeInsets.all(7),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(5),
-            child: CachedNetworkImage(
-              imageUrl: "https://image.tmdb.org/t/p/original$image",
-              width: 70,
-              placeholder: (context, url) => const Center(child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: CircularProgressIndicator(),
-              )),
-              errorWidget: (context, url, error) => const Center(child: Icon(Icons.error)),
-            ),
-            // child: Image.network(
-            //   "https://image.tmdb.org/t/p/original$image",
-            //   width: 70,
-            // ),
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(title,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[200],
-                        fontSize: 12)),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(overview,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                    style: TextStyle(color: Colors.grey[300], fontSize: 11)),
-                const SizedBox(
-                  height: 15,
-                ),
-                Text(releaseDate,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[500],
-                        fontSize: 10)),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
 }
