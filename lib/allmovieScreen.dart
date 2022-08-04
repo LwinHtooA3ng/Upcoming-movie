@@ -37,10 +37,10 @@ class _allMoviesState extends State<allMovies> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      // backgroundColor: Colors.grey[200],
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(5),
+          padding: const EdgeInsets.all(5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -134,7 +134,7 @@ Widget movieCard({title, image, releaseDate, overview}) {
                     maxLines: 2,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey[800],
+                        color: Colors.grey[200],
                         fontSize: 12)),
                 const SizedBox(
                   height: 10,
@@ -142,14 +142,14 @@ Widget movieCard({title, image, releaseDate, overview}) {
                 Text(overview,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
-                    style: TextStyle(color: Colors.grey[700], fontSize: 11)),
+                    style: TextStyle(color: Colors.grey[300], fontSize: 11)),
                 const SizedBox(
                   height: 15,
                 ),
                 Text(releaseDate,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey[700],
+                        color: Colors.grey[500],
                         fontSize: 10)),
               ],
             ),
