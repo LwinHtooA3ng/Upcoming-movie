@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class allMovies extends StatefulWidget {
   const allMovies({Key? key}) : super(key: key);
@@ -44,25 +46,47 @@ class _allMoviesState extends State<allMovies> {
             children: [
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 28, horizontal: 10),
-                child: Text("Upcoming movie", style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18, fontStyle: FontStyle.italic),),
+                child: Text(
+                  "Upcoming movie",
+                  style: TextStyle(
+                      letterSpacing: 2,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      fontStyle: FontStyle.italic),
+                ),
               ),
               Flexible(
-                flex: 3,
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: movie.length,
-                    itemBuilder: (context, index) {
-                      // return Text(movie[index]["original_title"]);
-                      var title = movie[index]["title"];
-                      var image = movie[index]["poster_path"];
-                      var releaseDate = movie[index]["release_date"];
-                      var overview = movie[index]["overview"];
-                      return movieCard(
-                          title: title,
-                          image: image,
-                          releaseDate: releaseDate,
-                          overview: overview);
-                    }),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    (movie.isEmpty)
+                        ? const Center(
+                            child: SpinKitThreeBounce(
+                              color: Colors.grey,
+                              size: 40.0,
+                            ),
+                          )
+                        : Flexible(
+                            // flex: 3,
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: movie.length,
+                                itemBuilder: (context, index) {
+                                  // return Text(movie[index]["original_title"]);
+                                  var title = movie[index]["title"];
+                                  var image = movie[index]["poster_path"];
+                                  var releaseDate =
+                                      movie[index]["release_date"];
+                                  var overview = movie[index]["overview"];
+                                  return movieCard(
+                                      title: title,
+                                      image: image,
+                                      releaseDate: releaseDate,
+                                      overview: overview);
+                                }),
+                          ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -77,14 +101,24 @@ Widget movieCard({title, image, releaseDate, overview}) {
     child: Padding(
       padding: const EdgeInsets.all(7),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ClipRRect(
-              borderRadius: BorderRadius.circular(5),
-              child: Image.network(
-                "https://image.tmdb.org/t/p/original$image",
-                width: 70,
+            borderRadius: BorderRadius.circular(5),
+            child: CachedNetworkImage(
+              imageUrl: "https://image.tmdb.org/t/p/original$image",
+              width: 70,
+              placeholder: (context, url) => const Center(child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircularProgressIndicator(),
               )),
+              errorWidget: (context, url, error) => const Center(child: Icon(Icons.error)),
+            ),
+            // child: Image.network(
+            //   "https://image.tmdb.org/t/p/original$image",
+            //   width: 70,
+            // ),
+          ),
           const SizedBox(
             width: 10,
           ),
