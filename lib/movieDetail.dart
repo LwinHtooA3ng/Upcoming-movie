@@ -64,14 +64,14 @@ class _movieDetailState extends State<movieDetail> {
                           letterSpacing: 1.4,
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
-                          color: Colors.blueAccent[400]),
+                          ),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     Text(
                       data['overview'],
-                      style: const TextStyle(letterSpacing: 1.2, fontSize: 12),
+                      style: TextStyle(letterSpacing: 1, fontSize: 12, color: Colors.grey[300]),
                     ),
                     const SizedBox(
                       height: 30,
@@ -110,11 +110,14 @@ Widget infoCard({icon, info, text}) {
           children: [
             Icon(icon),
             const SizedBox(
-              height: 5,
+              height: 6,
             ),
             Text(
               text,
               style: const TextStyle(fontSize: 10),
+            ),
+            const SizedBox(
+              height: 3,
             ),
             Text(
               info,
