@@ -38,27 +38,33 @@ class _allMoviesState extends State<allMovies> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.grey[200],
+      backgroundColor: Colors.grey[900],
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(5),
+          padding: const EdgeInsets.all(5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 28, horizontal: 10),
+                padding:const EdgeInsets.all(10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children:  [
                     Text(
                       "Upcoming movie",
                       style: TextStyle(
+                        color: Colors.blueAccent[400],
                           letterSpacing: 1.5,
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
                           fontStyle: FontStyle.italic),
                     ),
-                    Icon(Icons.search_rounded),
+                    // Icon(Icons.search_rounded),
+                    IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: Icon(Icons.logout)),
                   ],
                 ),
               ),
@@ -95,7 +101,7 @@ class _allMoviesState extends State<allMovies> {
                                     overview: overview,
                                     backImg: backImg,
                                     rating: rating,
-                                    movieId : movieId,
+                                    movieId: movieId,
                                   );
                                 }),
                           ),

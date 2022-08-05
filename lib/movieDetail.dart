@@ -23,6 +23,7 @@ class _movieDetailState extends State<movieDetail> {
     var rating = data['rating'];
 
     return Scaffold(
+      backgroundColor: Colors.grey[900],
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -30,11 +31,26 @@ class _movieDetailState extends State<movieDetail> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(1),
-                child: IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(Icons.arrow_back)),
+                child: Row(
+                  children : [ 
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(Icons.arrow_back_ios_new)),
+                      Expanded(
+                        child: Text(
+                        data['title'],
+                        style: const TextStyle(
+                          overflow: TextOverflow.clip,
+                          letterSpacing: 1.4,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                                          ),
+                      ),
+                  ],
+                ),
               ),
               const SizedBox(
                 height: 5,
@@ -56,22 +72,25 @@ class _movieDetailState extends State<movieDetail> {
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      data['title'],
-                      style: TextStyle(
-                          letterSpacing: 1.4,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          ),
-                    ),
+                    // Text(
+                    //   data['title'],
+                    //   style: const TextStyle(
+                    //     letterSpacing: 1.4,
+                    //     fontWeight: FontWeight.bold,
+                    //     fontSize: 15,
+                    //   ),
+                    // ),
                     const SizedBox(
                       height: 10,
                     ),
                     Text(
                       data['overview'],
-                      style: TextStyle(letterSpacing: 1, fontSize: 12, color: Colors.grey[300]),
+                      style: TextStyle(
+                          letterSpacing: 1,
+                          fontSize: 12,
+                          color: Colors.grey[300]),
                     ),
                     const SizedBox(
                       height: 30,
@@ -79,11 +98,19 @@ class _movieDetailState extends State<movieDetail> {
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          infoCard(icon: Icons.star, info: "$rating", text: "Rating"),
-                          infoCard(icon: Icons.date_range, info: data["releaseDate"], text: "Release Date"),
-                          infoCard(icon: Icons.numbers, info: "$movieId", text: "Movie Id"),
+                          infoCard(
+                              icon: Icons.star,
+                              info: "$rating",
+                              text: "Rating"),
+                          infoCard(
+                              icon: Icons.date_range,
+                              info: data["releaseDate"],
+                              text: "Release Date"),
+                          infoCard(
+                              icon: Icons.numbers,
+                              info: "$movieId",
+                              text: "Movie Id"),
                         ],
                       ),
                     )
@@ -101,7 +128,7 @@ class _movieDetailState extends State<movieDetail> {
 Widget infoCard({icon, info, text}) {
   return SizedBox(
     width: 100,
-    height:100,
+    height: 100,
     child: Card(
       child: Padding(
         padding: const EdgeInsets.all(10),

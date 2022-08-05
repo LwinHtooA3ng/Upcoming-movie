@@ -36,6 +36,7 @@ class movieCard extends StatelessWidget {
         });
       },
       child: Card(
+        // color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(7),
           child: Row(
