@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'allmovieScreen.dart';
-import 'movieDetail.dart';
-import 'registerScreen.dart';
-import 'loginScreen.dart';
-import 'firstScreen.dart';
+import 'screens/home.dart';
+import 'screens/movie_detail.dart';
+import 'screens/register.dart';
+import 'screens/login.dart';
+import 'screens/landing.dart';
 
-void main() => runApp(upcoming_movie());
+void main() => runApp(MovieInfo());
 
-class upcoming_movie extends StatelessWidget {
-  const upcoming_movie({Key? key}) : super(key: key);
+class MovieInfo extends StatelessWidget {
+  const MovieInfo({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class upcoming_movie extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // theme: ThemeData.dark(),
       theme: ThemeData(
-        brightness: Brightness.dark,
+        // brightness: Brightness.dark,
         primarySwatch: Colors.blue,
         inputDecorationTheme: const InputDecorationTheme(
           contentPadding: EdgeInsets.all(10),
@@ -37,9 +37,9 @@ class upcoming_movie extends StatelessWidget {
       title: "Main",
       initialRoute: "/",
       routes: {
-        "/": (context) => const startScreen(),
-        "/movies": (context) => const allMovies(),
-        "/detail": (context) => const movieDetail(),
+        "/": (context) => const StartScreen(),
+        "/movies": (context) => const AllMovies(),
+        "/detail": (context) => const MovieDetails(),
         '/register': (context) => const RegisterPage(),
         '/login': (context) => const LoginPage()
       },

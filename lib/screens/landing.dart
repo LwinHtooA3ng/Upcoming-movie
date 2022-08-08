@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class startScreen extends StatelessWidget {
-  const startScreen({Key? key}) : super(key: key);
+class StartScreen extends StatelessWidget {
+  const StartScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -10,19 +11,23 @@ class startScreen extends StatelessWidget {
       body: DefaultTextStyle(
         style: TextStyle(color: Colors.grey[100]),
         child: SafeArea(
-          child: Center(
+          child: Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("images/movie_bg.jpg",),
+                fit: BoxFit.cover,
+              ),
+            ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Image(
-                    image: AssetImage("images/logo.png"),
-                    width: 200,
-                    height: 200,
-                  ),
+                  Text("Movie info", style: GoogleFonts.ubuntu(fontSize: 25, color : Colors.blueAccent[400], fontWeight: FontWeight.bold)),
                   const SizedBox(
-                    height: 40,
+                    height: 30,
                   ),
                   SizedBox(
                       width: double.infinity,
@@ -40,9 +45,11 @@ class startScreen extends StatelessWidget {
                   SizedBox(
                       width: double.infinity,
                       height: 45,
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: Colors.blueAccent[400]),
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          primary: Colors.white,
+                          side: const BorderSide(width: 1, color: Colors.blue)
+                        ),
                           onPressed: () {
                             Navigator.pushNamed(context, '/register');
                           },
