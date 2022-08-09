@@ -5,7 +5,7 @@ import 'screens/register.dart';
 import 'screens/login.dart';
 import 'screens/landing.dart';
 
-void main() => runApp(MovieInfo());
+void main() => runApp(const MovieInfo());
 
 class MovieInfo extends StatelessWidget {
   const MovieInfo({Key? key}) : super(key: key);

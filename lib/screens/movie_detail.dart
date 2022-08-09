@@ -24,13 +24,14 @@ class _MovieDetailsState extends State<MovieDetails> {
     var rating = data['rating'];
 
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Colors.grey[100],
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
+                height: 60,
                 color: Colors.blueAccent[400],
                 child: Padding(
                   padding: const EdgeInsets.all(1),
