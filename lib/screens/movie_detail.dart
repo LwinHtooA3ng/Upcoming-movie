@@ -36,14 +36,16 @@ class _MovieDetailsState extends State<MovieDetails> {
                 child: Padding(
                   padding: const EdgeInsets.all(1),
                   child: Row(
-                    children : [ 
+                    children: [
                       IconButton(
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        icon: const Icon(Icons.arrow_back_ios_new),color: Colors.white,),
-                        Expanded(
-                          child: Text(
+                        icon: const Icon(Icons.arrow_back_ios_new),
+                        color: Colors.white,
+                      ),
+                      Expanded(
+                        child: Text(
                           data['title'],
                           style: GoogleFonts.ubuntu(
                             // overflow: TextOverflow.clip,
@@ -52,8 +54,8 @@ class _MovieDetailsState extends State<MovieDetails> {
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
                           ),
-                                            ),
                         ),
+                      ),
                     ],
                   ),
                 ),
@@ -80,19 +82,20 @@ class _MovieDetailsState extends State<MovieDetails> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Overview", style: GoogleFonts.ubuntu(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    ),),
+                    Text(
+                      "Overview",
+                      style: GoogleFonts.ubuntu(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
-                    
                     Text(
                       data['overview'],
                       style: GoogleFonts.openSans(
-                          fontSize: 12,
-                          color: Colors.grey[700]),
+                          fontSize: 12, color: Colors.grey[700]),
                     ),
                     const SizedBox(
                       height: 30,
@@ -108,8 +111,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                         infoCard(
                             icon: Icons.date_range,
                             info: data["releaseDate"],
-                            text: "Release Date"
-                            ),
+                            text: "Release Date"),
                         infoCard(
                             icon: Icons.numbers,
                             info: "$movieId",
@@ -137,7 +139,10 @@ Widget infoCard({icon, info, text, color}) {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: color,),
+            Icon(
+              icon,
+              color: color,
+            ),
             const SizedBox(
               height: 6,
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:upcoming_movie/components/snackbar.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -15,7 +16,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
   bool _submitted = false;
 
-  TextEditingController usernameController = TextEditingController();
+  bool isLoading = false;
+
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   @override
@@ -24,27 +27,28 @@ class _RegisterPageState extends State<RegisterPage> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Container(
         alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("images/movie_bg.jpg",),
-                  fit: BoxFit.cover,
-                ),
-              ),
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+              "images/movie_bg.jpg",
+            ),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Scaffold(
           backgroundColor: Colors.transparent,
           body: DefaultTextStyle(
               style: TextStyle(color: Colors.grey[100]),
               child: Form(
                 key: _formKey,
-                autovalidateMode: _submitted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+                autovalidateMode: _submitted
+                    ? AutovalidateMode.onUserInteraction
+                    : AutovalidateMode.disabled,
                 child: Center(
                   child: ListView(
                     shrinkWrap: true,
-                    padding: const EdgeInsets.symmetric(horizontal: 35),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     children: [
-                      const SizedBox(
-                        height: 15,
-                      ),
                       const SizedBox(
                         height: 15,
                       ),
@@ -59,20 +63,23 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: 25,
                       ),
                       TextFormField(
-                        controller: usernameController,
+                        controller: emailController,
                         cursorColor: Colors.blueAccent,
                         style: const TextStyle(color: Colors.white),
                         validator: (text) {
                           if (text == null || text.isEmpty) {
-                            return 'Username can\'t be empty';
-                          } else if (text.length < 3) {
-                            return 'Username too short';
+                            return 'Email can\'t be empty';
+                            // } else if (text.length < 3) {
+                            //   return 'Username too short';
                           } else {
                             return null;
                           }
                         },
                         decoration: InputDecoration(
-                          label: const Text("username", style: TextStyle(fontSize: 13),),
+                          label: const Text(
+                            "email",
+                            style: TextStyle(fontSize: 13),
+                          ),
                           prefixIcon: const Icon(
                             Icons.person,
                             color: Colors.white,
@@ -102,7 +109,10 @@ class _RegisterPageState extends State<RegisterPage> {
                             Icons.lock,
                             color: Colors.white,
                           ),
-                          label: const Text("password", style: TextStyle(fontSize: 13),),
+                          label: const Text(
+                            "password",
+                            style: TextStyle(fontSize: 13),
+                          ),
                           labelStyle: TextStyle(color: Colors.grey[100]),
                           suffixIcon: IconButton(
                             onPressed: () {
@@ -132,7 +142,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           child: const Text(
                             "Already have an account? Log In",
                             style: TextStyle(
-                                fontSize: 10,),
+                              fontSize: 10,
+                            ),
                           ),
                         ),
                       ),
@@ -142,33 +153,83 @@ class _RegisterPageState extends State<RegisterPage> {
                               style: ElevatedButton.styleFrom(
                                   primary: Colors.blueAccent[400]),
                               onPressed: () async {
-                                
                                 FocusScope.of(context).unfocus();
-          
+
                                 setState(() => _submitted = true);
-            
-                                final usernameValid =
+
+                                final registerValid =
                                     _formKey.currentState!.validate();
-          
-                                if(usernameValid){
-                                  final prefs =
-                                      await SharedPreferences.getInstance();
-          
-                                  await prefs.setString(
-                                      'username', usernameController.text);
-          
-                                  await prefs.setString(
-                                      "password", passwordController.text);
-          
-                                  Navigator.pushReplacementNamed(context, '/login');
-                                  usernameController.clear();
-                                  passwordController.clear();
-                                  setState(() => _submitted = false);
-                                  
+
+                                if (registerValid) {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+
+                                  try {
+                                    final _auth = FirebaseAuth.instance;
+
+                                    final newUser = await _auth
+                                        .createUserWithEmailAndPassword(
+                                            email: emailController.text,
+                                            password: passwordController.text);
+                                    // print(newUser);
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                    showSnackbar(context,"Register successful !",3,Colors.green);
+
+                                    Navigator.pushReplacementNamed(context, '/login');
+                                    emailController.clear();
+                                    passwordController.clear();
+                                    setState(() => _submitted = false);
+                                  } on FirebaseAuthException catch (e) {
+                                    // print(e);
+                                    // print(e.code);
+
+                                    String errorMessage = "";
+                                    String code = e.code;
+
+                                    if (code == "invalid-email") {
+                                      errorMessage = "Invalid email.";
+                                    } else if (code == "email-already-in-use") {
+                                      errorMessage =
+                                          "Email was already in use.";
+                                    } else if (code == "too-many-requests") {
+                                      errorMessage =
+                                          "Too many request try again later.";
+                                    } else if (code ==
+                                        "network-request-failed") {
+                                      errorMessage =
+                                          "Your are currently offline.";
+                                    } else {
+                                      errorMessage =
+                                          "Something went wrong please try again.";
+                                    }
+
+                                    showSnackbar(
+                                        context, errorMessage, 1, Colors.red);
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  }
+
+                                  // Navigator.pushReplacementNamed(
+                                  //     context, '/login');
+                                  // emailController.clear();
+                                  // passwordController.clear();
+                                  // setState(() => _submitted = false);
                                 }
-          
                               },
-                              child: const Text("Register"))),
+                              child: (isLoading)
+                                  ? const SizedBox(
+                                      width: 15,
+                                      height: 15,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : const Text("Register"))),
                     ],
                   ),
                 ),

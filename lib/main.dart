@@ -4,8 +4,17 @@ import 'screens/movie_detail.dart';
 import 'screens/register.dart';
 import 'screens/login.dart';
 import 'screens/landing.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-void main() => runApp(const MovieInfo());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const MovieInfo());
+}
 
 class MovieInfo extends StatelessWidget {
   const MovieInfo({Key? key}) : super(key: key);
@@ -35,7 +44,9 @@ class MovieInfo extends StatelessWidget {
         ),
       ),
       title: "Main",
-      initialRoute: "/",
+      initialRoute:
+          (FirebaseAuth.instance.currentUser == null) ? "/" : "/movies",
+      // initialRoute: "/",
       routes: {
         "/": (context) => const StartScreen(),
         "/movies": (context) => const AllMovies(),

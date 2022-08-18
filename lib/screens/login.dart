@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../components/snackbar.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -13,9 +14,11 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _submitted = false;
 
+  bool isLoading = false;
+
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController usernameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   @override
@@ -24,22 +27,26 @@ class _LoginPageState extends State<LoginPage> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Container(
         decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("images/movie_bg.jpg",),
-                  fit: BoxFit.cover,
-                ),
-              ),
+          image: DecorationImage(
+            image: AssetImage(
+              "images/movie_bg.jpg",
+            ),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Scaffold(
           backgroundColor: Colors.transparent,
           body: DefaultTextStyle(
               style: TextStyle(color: Colors.grey[100]),
               child: Form(
                 key: _formKey,
-                autovalidateMode: _submitted ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+                autovalidateMode: _submitted
+                    ? AutovalidateMode.onUserInteraction
+                    : AutovalidateMode.disabled,
                 child: Center(
                   child: ListView(
                     shrinkWrap: true,
-                    padding: const EdgeInsets.symmetric(horizontal: 35),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     children: [
                       const SizedBox(
                         height: 15,
@@ -58,17 +65,20 @@ class _LoginPageState extends State<LoginPage> {
                         height: 25,
                       ),
                       TextFormField(
-                        controller: usernameController,
+                        controller: emailController,
                         cursorColor: Colors.blueAccent,
                         style: const TextStyle(color: Colors.white),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Username required";
+                            return "email required";
                           }
                           return null;
                         },
                         decoration: InputDecoration(
-                          label: const Text("username", style: TextStyle(fontSize: 13),),
+                          label: const Text(
+                            "email",
+                            style: TextStyle(fontSize: 13),
+                          ),
                           prefixIcon: const Icon(
                             Icons.person,
                             color: Colors.white,
@@ -84,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                         cursorColor: Colors.blueAccent,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Password required";
+                            return "password required";
                           }
                           return null;
                         },
@@ -95,7 +105,10 @@ class _LoginPageState extends State<LoginPage> {
                             Icons.lock,
                             color: Colors.white,
                           ),
-                          label: const Text("password", style: TextStyle(fontSize: 13),),
+                          label: const Text(
+                            "password",
+                            style: TextStyle(fontSize: 13),
+                          ),
                           labelStyle: TextStyle(color: Colors.grey[100]),
                           suffixIcon: IconButton(
                             onPressed: () {
@@ -120,12 +133,14 @@ class _LoginPageState extends State<LoginPage> {
                         height: 30,
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.pushReplacementNamed(context, '/register');
+                            Navigator.pushReplacementNamed(
+                                context, '/register');
                           },
                           child: const Text(
                             "Don't have an account? Register Here",
                             style: TextStyle(
-                                fontSize: 10,),
+                              fontSize: 10,
+                            ),
                           ),
                         ),
                       ),
@@ -138,43 +153,74 @@ class _LoginPageState extends State<LoginPage> {
                                 primary: Colors.blueAccent[400]),
                             onPressed: () async {
                               FocusScope.of(context).unfocus();
-          
+
                               setState(() => _submitted = true);
-          
-                              final prefs = await SharedPreferences.getInstance();
-                              final String? username =
-                                  prefs.getString('username');
-                              final String? password =
-                                  prefs.getString('password');
-          
+
                               final loginValidate =
                                   _formKey.currentState!.validate();
-          
+
                               if (loginValidate) {
-                                if (usernameController.text == username &&
-                                    passwordController.text == password) {
-                                      setState(() => _submitted = false);
-                                  Navigator.pushReplacementNamed(context, '/movies');
-                                  usernameController.clear();
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                try {
+                                  final _auth = FirebaseAuth.instance;
+
+                                  UserCredential currentUser =
+                                      await _auth.signInWithEmailAndPassword(
+                                          email: emailController.text,
+                                          password: passwordController.text);
+                                  setState(() => _submitted = false);
+                                  // print(currentUser);
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                  showSnackbar(context, "Login successful !", 3,Colors.green);
+                                  Navigator.pushNamedAndRemoveUntil(context, "/movies", (route) => false);
+                                  emailController.clear();
                                   passwordController.clear();
-                                } else {
-                                  if (usernameController.text.isNotEmpty &&
-                                      passwordController.text.isNotEmpty) {
-                                    var snackBar = const SnackBar(
-                                      backgroundColor: Colors.red,
-                                      duration: Duration(seconds: 1),
-                                      content:
-                                          Text('Invalid username or password !'),
-                                    );
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
+                                } on FirebaseAuthException catch (e) {
+                                  // print(e);
+                                  // print(e.code);
+
+                                  String errorMessage = "";
+                                  String code = e.code;
+
+                                  if (code == "invalid-email") {
+                                    errorMessage = "Invalid email.";
+                                  } else if (code == "user-not-found") {
+                                    errorMessage = "User not found.";
+                                  } else if (code == "wrong-password") {
+                                    errorMessage = "Invalid password.";
+                                  } else if (code == "too-many-requests") {
+                                    errorMessage =
+                                        "Too many request try again later";
+                                  } else if (code == "network-request-failed") {
+                                    errorMessage =
+                                        "Your are currently offline.";
                                   } else {
-                                    Container();
+                                    errorMessage =
+                                        "Something went wrong please try again.";
                                   }
+
+                                  showSnackbar(
+                                      context, errorMessage, 1, Colors.red);
+
+                                  setState(() {
+                                    isLoading = false;
+                                  });
                                 }
                               }
                             },
-                            child: const Text("Login")),
+                            child: (isLoading)
+                                ? const SizedBox(
+                                    width: 15,
+                                    height: 15,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 2,
+                                    ))
+                                : const Text("Login")),
                       ),
                     ],
                   ),

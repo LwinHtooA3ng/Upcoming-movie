@@ -15,17 +15,23 @@ class StartScreen extends StatelessWidget {
             alignment: Alignment.center,
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("images/movie_bg.jpg",),
+                image: AssetImage(
+                  "images/movie_bg.jpg",
+                ),
                 fit: BoxFit.cover,
               ),
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Movie info", style: GoogleFonts.ubuntu(fontSize: 25, color : Colors.blueAccent[400], fontWeight: FontWeight.bold)),
+                  Text("Movie info",
+                      style: GoogleFonts.ubuntu(
+                          fontSize: 25,
+                          color: Colors.blueAccent[400],
+                          fontWeight: FontWeight.bold)),
                   const SizedBox(
                     height: 30,
                   ),
@@ -46,10 +52,10 @@ class StartScreen extends StatelessWidget {
                       width: double.infinity,
                       height: 45,
                       child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          primary: Colors.white,
-                          side: const BorderSide(width: 1, color: Colors.blue)
-                        ),
+                          style: OutlinedButton.styleFrom(
+                              primary: Colors.white,
+                              side: const BorderSide(
+                                  width: 1, color: Colors.blue)),
                           onPressed: () {
                             Navigator.pushNamed(context, '/register');
                           },

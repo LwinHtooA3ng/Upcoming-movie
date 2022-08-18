@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../api/movie_api.dart';
 import '../model/result_res.dart';
 import '../components/now_playing_card.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../components/snackbar.dart';
 
 class AllMovies extends StatefulWidget {
   const AllMovies({Key? key}) : super(key: key);
@@ -14,7 +16,6 @@ class AllMovies extends StatefulWidget {
 }
 
 class _AllMoviesState extends State<AllMovies> {
-
   List<Result> upcomingMovies = [];
   List<Result> popularMovies = [];
   List<Result> nowPlayingMovies = [];
@@ -40,8 +41,15 @@ class _AllMoviesState extends State<AllMovies> {
     });
   }
 
+  checkLogin() {
+    if (FirebaseAuth.instance.currentUser == null) {
+      Navigator.pushReplacementNamed(context, "/login");
+    }
+  }
+
   @override
   void initState() {
+    checkLogin();
     getUpcomingMovies();
     getPopularMovies();
     getNowPlayingMovies();
@@ -68,8 +76,11 @@ class _AllMoviesState extends State<AllMovies> {
               ),
             ),
             IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
+                  // Navigator.pop(context);
+                  checkLogin();
+                  showSnackbar(context, "Logout successful !", 3, Colors.green);
                 },
                 icon: const Icon(Icons.logout)),
           ],
@@ -194,8 +205,8 @@ class _AllMoviesState extends State<AllMovies> {
                                 title: upcomingMovies[index].title,
                                 image: upcomingMovies[index].posterPath,
                                 releaseDate: upcomingMovies[index]
-                                    .releaseDate.toString(),
-                               
+                                    .releaseDate
+                                    .toString(),
                                 overview: upcomingMovies[index].overview,
                                 backImg: upcomingMovies[index].backdropPath,
                                 rating: upcomingMovies[index].voteAverage,

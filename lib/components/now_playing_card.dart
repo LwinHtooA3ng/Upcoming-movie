@@ -71,33 +71,38 @@ class NowPlaying extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                  SizedBox(
-                    width:200,
-                    child: Text(
-                      title,
-                      style: GoogleFonts.openSans(fontSize: 10,color: Colors.grey[800], fontWeight: FontWeight.w500),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ),
-                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                        size: 14,
-                      ),
-                      const SizedBox(
-                        width: 3,
-                      ),
-                      Text("$rating",
+                      SizedBox(
+                        width: 200,
+                        child: Text(
+                          title,
                           style: GoogleFonts.openSans(
-                              fontSize: 10, color: Colors.grey[700], fontWeight: FontWeight.bold))
-                    ],
-                  )
-                ]),
+                              fontSize: 10,
+                              color: Colors.grey[800],
+                              fontWeight: FontWeight.w500),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                            size: 14,
+                          ),
+                          const SizedBox(
+                            width: 3,
+                          ),
+                          Text("$rating",
+                              style: GoogleFonts.openSans(
+                                  fontSize: 10,
+                                  color: Colors.grey[700],
+                                  fontWeight: FontWeight.bold))
+                        ],
+                      )
+                    ]),
               ),
             ],
           ),

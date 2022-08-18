@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "676320743512",
+    "project_id": "dartflix-4e960",
+    "storage_bucket": "dartflix-4e960.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:676320743512:android:711a297a862b8da414fa2d",
+        "android_client_info": {
+          "package_name": "com.example.upcoming_movie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "676320743512-tf2j83bf2ls26v8hfrvpjmitjeqpi3pb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZ96lB9jy8AAvISJHR9Rl3sCctL1Mo7wY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "676320743512-tf2j83bf2ls26v8hfrvpjmitjeqpi3pb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "676320743512-d1n4j7hqbeofie0s1333emu0sjc19e19.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.upcomingMovie"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
